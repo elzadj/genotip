@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2011 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Chrome DevRel Team (chrome-devrel@googlegroups.com)
+                 Alex Russell (slightlyoff@chromium.org)
+                 Brad Neuberg
+-->
+<html manifest="cache.appcache">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" />
+    <title>Эволюция генотипа</title>
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono" rel="stylesheet" type="text/css" />
+    <link id="prettify-link" href="src/prettify/prettify.css" rel="stylesheet" disabled />
+    <link href="css/moon.css" class="theme" rel="stylesheet" />
+    <link href="css/sand.css" class="theme" rel="stylesheet" />
+    <link href="css/sea_wave.css" class="theme" rel="stylesheet" />
+    <link href="css/default.css" class="theme" rel="stylesheet" media="screen"  />
+    <link href="css/common.css" rel="stylesheet" media="screen" />
+  </head>
+  <body>
+    <nav id="helpers">
+      <button title="Previous slide" id="nav-prev" class="nav-prev">⇽</button> 
+      <button title="Jump to a random slide" id="slide-no">5</button> 
+      <button title="Next slide" id="nav-next" class="nav-next">⇾</button>
+      <menu>
+        <button type="checkbox" data-command="toc" title="Table of Contents" class="toc">TOC</button>
+        <!-- <button type="checkbox" data-command="resources" title="View Related Resources">☆</button> -->
+        <button type="checkbox" data-command="notes" title="View Slide Notes">✏</button>
+        <button type="checkbox" data-command="source" title="View slide source">↻</button>
+        <button type="checkbox" data-command="help" title="View Help">?</button>
+      </menu>
+    </nav>
+    <div class="presentation">
+      <div id="presentation-counter">Loading...</div>
+      <div class="slides">
+        <div class="slide" id="landing-slide">
+          <style>
+            #landing-slide p {
+              font-size: 35px;
+            }
+            #disclaimer-message {
+              font-size: 20px;
+            }
+          </style>
+          <section class="middle">
+            <p>Эта презентация написана на HTML5, CSS3 и JS</p>
+            <p>Нажмите <span id="left-init-key" class="key">&rarr;</span> для продолжения.</p>
+          </section>
+          <aside class="note">
+            <section>
+              Алоха! 
+            </section>
+          </aside> 
+        </div>
+
+        <div class="slide" id="controls-slide">
+          <header>Hot-keys</header>
+          <style>
+            #controls-slide li, #controls-slide p {
+              font-size: 32px;
+            }
+            #controls-slide .key {
+              bottom: 2px;
+            }
+          </style>
+          <section>
+            <ul>
+              <li><span class="key">&larr;</span> и <span class="key">&rarr;</span> для навигации.</li>
+              <li><span class="key">Ctrl/Command</span> и <span class="key">+</span> или <span class="key">-</span> для изменения масштаба.</li>
+              <li><span class="key">S</span> для просмотра исходного кода страницы.</li>
+              <li><span class="key">N</span> включить заметки.</li>
+              <li><span class="key">3</span> включить 3D.</li>
+              <li><span class="key">0</span> помощь.</li>
+            </ul>
+          </section>
+        </div>
+
+        <div class="slide" id="title-slide">
+          <style>
+            #title-slide h1, #title-slide h2 {
+              color: black;
+            }
+            #title-slide h1 {
+              letter-spacing: -2px;
+              font-size: 90px;
+            }
+            #title-slide h2 {
+              margin-top: -5px;
+              font-size: 40px;
+              letter-spacing: -1px;
+            }
+          </style>
+          <section class="middle">
+           
+              <h1>
+                Эволюция генотипа
+              </h1>
+              
+           
+       
+          </section>
+        </div>
+
+
+        <div class="slide" id="basic-definitions">
+          <header>Основные определения и обозначения</header>
+          <section>
+            <style>
+            #definitions {
+              font-size: 20px;
+            }
+             
+            </style>
+            <ul id="definitions">
+            <li><b>Ген</b> — единица наследственности живых организмов, определяющая признаки, передающиеся от родителей к потомству при размножении. </li>
+            <li><b>Генотип</b> — совокупность генов данного организма, которая характеризует особь. Определяется генами, полученными от родителей.</li>
+            <li><b>Доминантный признак</b> — подавляющий, &laquo;сильный&raquo;, обозначим заглавной <span class="strong">А</span></li>
+            <li><b>Рецессивный признак</b> — подавляемый, &laquo;слабый&raquo;, обозначим строчной <span class="css">a</span></li>
+            <li><b>Доминантная особь</b> имеет генотип <span class="strong">А</span><span class="strong">А</span></li>
+            <li><b>Гибридная особь</b> имеет генотип <span class="strong">А</span><span class="css">a</span></li>
+            <li><b>Рецессивная особь</b> имеет генотип <span class="css">a</span><span class="css">a</span></li>
+            </ul>
+          </section>
+        </div>
+        
+        <div class="slide" id="basic-definitions2-ex">
+          <header>Основные определения и обозначения</header>
+          <section>
+            <style>
+            #definitions {
+              font-size: 20px;
+            }
+             
+            </style>
+            <ul id="definitions">
+            <li><b>x</b> — относительное численность доминантных особей и вероятность того, что случайно выбранная особь имеет генотип <span class="strong">А</span><span class="strong">А</span></li>
+            <li><b>y</b> — относительное численность гибридных особей и вероятность того, что случайно выбранная особь имеет генотип <span class="strong">А</span><span class="css">a</span></li>
+            <li><b>z</b> — относительное численность рецессивных особей и вероятность того, что случайно выбранная особь имеет генотип <span class="css">a</span><span class="css">a</span></li>
+            <li><img height="15" src="x_with_line.png" alt="x_with_line" />, <img height="15" src="y_with_line.png" alt="y_with_line" />, <img height="15" src="z_with_line.png" alt="z_with_line" /> - составы генотипов следующего поколения (доминантные, гибридные и рецессивные особи соответственно).
+            </ul>
+            <p><pre>x &#8805 0, y &#8805 0, z &#8805 0, x + y + z = 1</pre></p>
+          </section>        
+          
+        </div>
+
+
+        <div class="slide" id="form-genotip-dominants">
+        	<header>Скрещивание доминантных особей</header>
+          <section class="scheme">
+          
+          	<table>
+          		<tr>
+          			<th><span class="venus">&#9792;</span></th>
+          			<th>&#215;</th>
+          			<th><span class="mars">&#9794;</span></th>
+          		</tr>
+          		<tr>
+          			<th>Женская особь</th>
+          			<th></th>
+          			<th>Мужская особь</th>
+          		</tr>
+          		<tr>
+						<td><span class="strong">А</span><span class="strong">А</span></td>    
+						<td></td>      		
+						<td><span class="strong">А</span><span class="strong">А</span></td>
+          		</tr>
+          	</table>
+             </section>
+         
+          <canvas id="canvas" width="838" height="100"></canvas>
+           <script>
+
+           	var canvasContext = document.getElementById("canvas").getContext("2d");
+          
+           	canvasContext.moveTo(213,0);
+           	canvasContext.lineTo(110,100);
+  
+           	canvasContext.moveTo(250,0);
+           	canvasContext.lineTo(337,100);
+           	
+           	canvasContext.moveTo(648,0);
+           	canvasContext.lineTo(565,100);
+           
+           	canvasContext.moveTo(688,0);
+           	canvasContext.lineTo(790,100);
+           
+           	canvasContext.stroke(); 
+           </script>
+          
+          	<table>
+          		<tr>
+						<td><span class="strong">А</span></td>    
+						<td></td> 
+						<td><span class="strong">А</span></td> 
+						<td></td>      		
+						<td><span class="strong">А</span></td>    
+						<td></td> 
+						<td><span class="strong">А</span></td> 
+          		</tr>
+          	</table>
+            
+          <canvas id="canvas2" width="838" height="130"></canvas>
+           <script>
+           	var canvasContext2 = document.getElementById("canvas2").getContext("2d");
+         
+           	canvasContext2.moveTo(110,0);
+           	canvasContext2.lineTo(95,130);
+           	
+           	canvasContext2.moveTo(110,0);
+           	canvasContext2.lineTo(320,130);
+           	
+           	canvasContext2.moveTo(337,0);
+           	canvasContext2.lineTo(580,130);
+           	
+           	canvasContext2.moveTo(337,0);
+           	canvasContext2.lineTo(770,130);
+				
+				canvasContext2.moveTo(565,0);
+           	canvasContext2.lineTo(547,130);         	
+           	
+           	canvasContext2.moveTo(565,0);
+           	canvasContext2.lineTo(127,130);
+           	
+           	canvasContext2.moveTo(790,0);
+           	canvasContext2.lineTo(353,130);
+           	
+           	canvasContext2.moveTo(790,0);
+           	canvasContext2.lineTo(807,130);
+           	
+           	canvasContext2.stroke(); 
+           </script>
+          
+          	<table>
+          		<tr>
+						<td><span class="strong">А</span><span class="strong">А</span></td>    
+						<td></td> 
+						<td><span class="strong">А</span><span class="strong">А</span></td> 
+						<td></td>      		
+						<td><span class="strong">А</span><span class="strong">А</span></td>    
+						<td></td> 
+						<td><span class="strong">А</span><span class="strong">А</span></td> 
+          		</tr>
+          	</table>
+          	
+          	<pre>AA + AA = AA</pre>
+            
+        </div>
+        
+        <div class="slide" id="form-genotip-hybrids">
+        	<header>Скрещивание гибридов</header>
+          <section class="scheme">
+          
+          	<table>
+          		<tr>
+          			<th><span class="venus">&#9792;</span></th>
+          			<th>&#215;</th>
+          			<th><span class="mars">&#9794;</span></th>
+          		</tr>
+          		<tr>
+          			<th>Женская особь</th>
+          			<th></th>
+          			<th>Мужская особь</th>
+          		</tr>
+          		<tr>
+						<td><span class="strong">А</span><span class="css">a</span></td>    
+						<td></td>      		
+						<td><span class="strong">А</span><span class="css">a</span></td>
+          		</tr>
+          	</table>
+             </section>
+         
+          <canvas id="hybrid" width="838" height="100"></canvas>
+           <script>
+           	var hybridContext = document.getElementById("hybrid").getContext("2d");
+          
+           	hybridContext.moveTo(213,0);
+           	hybridContext.lineTo(110,100);
+  
+           	hybridContext.moveTo(250,0);
+           	hybridContext.lineTo(337,100);
+           	
+           	hybridContext.moveTo(648,0);
+           	hybridContext.lineTo(565,100);
+           
+           	hybridContext.moveTo(688,0);
+           	hybridContext.lineTo(790,100);
+           	hybridContext.stroke(); 
+           </script>
+          
+          	<table>
+          		<tr>
+						<td><span class="strong">А</span></td>    
+						<td></td> 
+						<td><span class="css">a</span></td> 
+						<td></td>      		
+						<td><span class="strong">А</span></td>    
+						<td></td> 
+						<td><span class="css">a</span></td> 
+          		</tr>
+          	</table>
+            
+          <canvas id="hybrid2" width="838" height="130"></canvas>
+           <script>
+           	var hybridContext2 = document.getElementById("hybrid2").getContext("2d");
+         
+           	hybridContext2.moveTo(110,0);
+           	hybridContext2.lineTo(95,130);
+           	
+           	hybridContext2.moveTo(110,0);
+           	hybridContext2.lineTo(320,130);
+           	
+           	hybridContext2.moveTo(337,0);
+           	hybridContext2.lineTo(580,130);
+           	
+           	hybridContext2.moveTo(337,0);
+           	hybridContext2.lineTo(770,130);
+				
+				hybridContext2.moveTo(565,0);
+           	hybridContext2.lineTo(547,130);         	
+           	
+           	hybridContext2.moveTo(565,0);
+           	hybridContext2.lineTo(127,130);
+           	
+           	hybridContext2.moveTo(790,0);
+           	hybridContext2.lineTo(353,130);
+           	
+           	hybridContext2.moveTo(790,0);
+           	hybridContext2.lineTo(807,130);
+           	
+           	hybridContext2.stroke(); 
+           </script>
+          
+          	<table>
+          		<tr>
+						<td><span class="strong">А</span><span class="strong">А</span></td>    
+						<td></td> 
+						<td><span class="strong">А</span><span class="css">a</span></td> 
+						<td></td>      		
+						<td><span class="strong">А</span><span class="css">a</span></td>    
+						<td></td> 
+						<td><span class="css">a</span><span class="css">a</span></td> 
+          		</tr>
+          	</table>
+          	
+          	<pre>Aa + Aa = &#188;AA + &#189;Aa + &#188;aa</pre>
+            
+        </div>
+        
+        <div class="slide" id="form-genotip-domrec">
+        	<header>Скрещивание доминантной и рецессивной особей</header>
+        
+          <section class="scheme">
+          
+          	<table>
+          		<tr>
+          			<th><span class="venus">&#9792;</span></th>
+          			<th>&#215;</th>
+          			<th><span class="mars">&#9794;</span></th>
+          		</tr>
+          		<tr>
+          			<th>Женская особь</th>
+          			<th></th>
+          			<th>Мужская особь</th>
+          		</tr>
+          		<tr>
+						<td><span class="strong">А</span><span class="strong">А</span></td>    
+						<td></td>      		
+						<td><span class="css">a</span><span class="css">a</span></td>
+          		</tr>
+          	</table>
+             </section>
+         
+          <canvas id="domrec" width="838" height="100"></canvas>
+           <script>
+           	var domrecContext = document.getElementById("domrec").getContext("2d");
+          
+           	domrecContext.moveTo(213,0);
+           	domrecContext.lineTo(110,100);
+  
+           	domrecContext.moveTo(250,0);
+           	domrecContext.lineTo(337,100);
+           	
+           	domrecContext.moveTo(648,0);
+           	domrecContext.lineTo(565,100);
+           
+           	domrecContext.moveTo(688,0);
+           	domrecContext.lineTo(790,100);
+           	domrecContext.stroke(); 
+           </script>
+          
+          	<table>
+          		<tr>
+						<td><span class="strong">А</span></td>    
+						<td></td> 
+						<td><span class="strong">А</span></td>  
+						<td></td>      		
+						<td><span class="css">a</span></td>   
+						<td></td> 
+						<td><span class="css">a</span></td> 
+          		</tr>
+          	</table>
+            
+          <canvas id="domrec2" width="838" height="130"></canvas>
+           <script>
+           	var domrecContext2 = document.getElementById("domrec2").getContext("2d");
+         
+           	domrecContext2.moveTo(110,0);
+           	domrecContext2.lineTo(95,130);
+           	
+           	domrecContext2.moveTo(110,0);
+           	domrecContext2.lineTo(320,130);
+           	
+           	domrecContext2.moveTo(337,0);
+           	domrecContext2.lineTo(547,130);
+           	
+           	domrecContext2.moveTo(337,0);
+           	domrecContext2.lineTo(770,130);
+				
+				domrecContext2.moveTo(565,0);
+           	domrecContext2.lineTo(580,130);         	
+           	
+           	domrecContext2.moveTo(565,0);
+           	domrecContext2.lineTo(127,130);
+           	
+           	domrecContext2.moveTo(790,0);
+           	domrecContext2.lineTo(353,130);
+           	
+           	domrecContext2.moveTo(790,0);
+           	domrecContext2.lineTo(807,130);
+           	
+           	domrecContext2.stroke(); 
+           </script>
+          
+          	<table>
+          		<tr>
+						<td><span class="strong">А</span><span class="css">a</span></td>    
+						<td></td> 
+						<td><span class="strong">А</span><span class="css">a</span></td> 
+						<td></td>      		
+						<td><span class="strong">А</span><span class="css">a</span></td>    
+						<td></td> 
+						<td><span class="strong">А</span><span class="css">a</span></td> 
+          		</tr>
+          	</table>
+          	
+          	<pre>AA + Aa = Aa</pre>
+            
+        </div>
+        
+        
+			<div class="slide" id="table-of-genotips">
+          <header><h1>Всевозможные варианты</h1></header>
+          <section class="scheme">
+          <table border="2">
+          		<tr>
+          			<th rowspan="2">Вероятность скрещиваний</th>
+          			<th colspan="2" >Скрещиваемые генотипы	</th>
+          			<th rowspan="2">Генотипы потомства</th>
+          		</tr>
+          		<tr>
+          			<th>Женские</th>
+          			<th>Мужские</th>
+          		</tr>
+          		<tr>
+						<td>x&#178;</td>    
+						<td>AA</td>      		
+						<td>AA</td>
+						<td>AA</td>
+          		</tr>
+          		<tr>
+						<td>xy</td>    
+						<td>AA</td>      		
+						<td>aA</td>
+						<td>&#189;AA+&#189;aA</td>
+          		</tr>
+          		<tr>
+						<td>xz</td>    
+						<td>AA</td>      		
+						<td>aa</td>
+						<td>Aa</td>
+						</tr>
+					<tr>
+						<td>yx</td>    
+						<td>aA</td>      		
+						<td>AA</td>
+						<td>&#189;AA+&#189;aA</td>
+						</tr>
+					<tr>
+						<td>y&#178;</td>    
+						<td>aA</td>      		
+						<td>aA</td>
+						<td>&#188;AA+&#189;aA+&#188;aa</td>
+          		</tr>
+          		<tr>
+						<td>yz</td>    
+						<td>aA</td>      		
+						<td>aa</td>
+						<td>&#189;aA+&#189;aa</td>
+          		</tr>
+          		<tr>
+						<td>zx</td>    
+						<td>aa</td>      		
+						<td>AA</td>
+						<td>aA</td>
+						</tr>
+						<tr>
+						<td>zy</td>    
+						<td>aa</td>      		
+						<td>aA</td>
+						<td>&#189;aA+&#189;aa</td>
+          		</tr>
+          		<tr>
+						<td>z&#178;</td>    
+						<td>aa</td>      		
+						<td>aa</td>
+						<td>aa</td>
+          		</tr>
+          	</table>
+          	</section>
+          </div>
+          
+        <div class="slide" id="dominant-posterity">
+          <header><h1>Доминантные особи</h1></header>
+         <section>
+          <table border="2">
+          		<tr>
+          			<th rowspan="2">Вероятность скрещиваний</th>
+          			<th colspan="2" >Скрещиваемые генотипы	</th>
+          			<th rowspan="2">Генотипы потомства</th>
+          		</tr>
+          		<tr>
+          			<th>Женские</th>
+          			<th>Мужские</th>
+          		</tr>
+          		<tr>
+						<td>x&#178;</td>    
+						<td>AA</td>      		
+						<td>AA</td>
+						<td><span class="js">АА</span></td>
+          		</tr>
+          		<tr>
+						<td>xy</td>    
+						<td>AA</td>      		
+						<td>aA</td>
+						<td><span class="js">&#189;AА</span>+&#189;aA</td>
+          		</tr>
+          		<tr>
+						<td>xz</td>    
+						<td>AA</td>      		
+						<td>aa</td>
+						<td>Aa</td>
+						</tr>
+					<tr>
+						<td>yx</td>    
+						<td>aA</td>      		
+						<td>AA</td>
+						<td><span class="js">&#189;АА</span>+&#189;aA</td>
+						</tr>
+					<tr>
+						<td>y&#178;</td>    
+						<td>aA</td>      		
+						<td>aA</td>
+						<td><span class="js">&#188;АА </spa+&#189;aA+&#188;aa</td>
+          		</tr>
+          		<tr>
+						<td>yz</td>    
+						<td>aA</td>      		
+						<td>aa</td>
+						<td>&#189;aA+&#189;aa</td>
+          		</tr>
+          		<tr>
+						<td>zx</td>    
+						<td>aa</td>      		
+						<td>AA</td>
+						<td>aA</td>
+						</tr>
+						<tr>
+						<td>zy</td>    
+						<td>aa</td>      		
+						<td>aA</td>
+						<td>&#189;aA+&#189;aa</td>
+          		</tr>
+          		<tr>
+						<td>z&#178;</td>    
+						<td>aa</td>      		
+						<td>aa</td>
+						<td>aa</td>
+          		</tr>
+          	</table>
+          	</section>
+          	<section class="scheme">
+          	<img height="30" src="x_with_line.png" alt="x_with_line" /> = 
+          	<math>
+          		<msup>
+                  <mi>x</mi>
+                  <mn>2</mn>
+              </msup>
+              	<mo>+</mo>
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+              <mi>xy</mi>
+              <mo>+</mo>
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+              <mi>yx</mi>
+              <mo>+</mo>
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>4</mrow>
+              </mfrac>
+              <msup>
+                <mi>y</mi>
+                <mn>2</mn>
+              </msup>
+                =
+                <msup>
+                  <mi>x</mi>
+                  <mn>2</mn>
+              </msup>
+              	<mo>+</mo><mi>xy</mi>
+              <mo>+</mo>
+              
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>4</mrow>
+              </mfrac>
+              <msup>
+                <mi>y</mi>
+                <mn>2</mn>
+              </msup>
+                =
+               <msup>
+               	<mfenced>
+               		<mrow>
+                			<mi>x</mi>
+              				<mo>+</mo>
+                			<mfrac>
+              					<mrow>1</mrow>
+              					<mrow>2</mrow>
+             		 		</mfrac>
+              				<mi>y</mi>
+              				
+              			</mrow>
+              		</mfenced>
+              		<mn>2</mn>
+              		</msup>
+                	
+              </math></section>
+     
+          </div>
+          
+          <div class="slide" id="hybrids-posterity">          
+          <header><h1>Гибриды</h1></header>
+         <section>
+          <table border="2">
+          		<tr>
+          			<th rowspan="2">Вероятность скрещиваний</th>
+          			<th colspan="2" >Скрещиваемые генотипы	</th>
+          			<th rowspan="2">Генотипы потомства</th>
+          		</tr>
+          		<tr>
+          			<th>Женские</th>
+          			<th>Мужские</th>
+          		</tr>
+          		<tr>
+						<td>x&#178;</td>    
+						<td>AA</td>      		
+						<td>AA</td>
+						<td>AA</td>
+          		</tr>
+          		<tr>
+						<td>xy</td>    
+						<td>AA</td>      		
+						<td>aА</td>
+						<td>&#189;АА+<span class="js">&#189;aА</span></td>
+          		</tr>
+          		<tr>
+						<td>xz</td>    
+						<td>AA</td>      		
+						<td>aa</td>
+						<td><span class="js">Аa</span></td>
+						</tr>
+					<tr>
+						<td>yx</td>    
+						<td>aA</td>      		
+						<td>AA</td>
+						<td>&#189;АА+<span class="js">&#189;aА</span></td>
+						</tr>
+					<tr>
+						<td>y&#178;</td>    
+						<td>aA</td>      		
+						<td>aA</td>
+						<td>&#188;АА+<span class="js">&#189;aА</span>+&#188;aa</td>
+          		</tr>
+          		<tr>
+						<td>yz</td>    
+						<td>aA</td>      		
+						<td>aa</td>
+						<td><span class="js">&#189;aА</span>+&#189;aa</td>
+          		</tr>
+          		<tr>
+						<td>zx</td>    
+						<td>aa</td>      		
+						<td>AA</td>
+						<td><span class="js">aА</span></td>
+						</tr>
+						<tr>
+						<td>zy</td>    
+						<td>aa</td>      		
+						<td>aA</td>
+						<td><span class="js">&#189;aА</span>+&#189;aa</td>
+          		</tr>
+          		<tr>
+						<td>z&#178;</td>    
+						<td>aa</td>      		
+						<td>aa</td>
+						<td>aa</td>
+          		</tr>
+          	</table>
+          	</section>
+          	<section class="formula">
+          	<img height="30" src="y_with_line.png" alt="y_with_line" /> = 
+          	<math>
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+              <mi>xy</mi>
+              <mo>+</mo>
+             	<mi>xz</mi><mo>+</mo>
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+              <mi>yx</mi>
+              <mo>+</mo>
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+              <msup>
+                <mi>y</mi>
+                <mn>2</mn>
+              </msup>
+              <mo>+</mo>
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+              <mi>yz</mi>
+              <mo>+</mo>
+             	<mi>zx</mi>
+             	<mo>+</mo>
+             	<mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+               <mi>zy</mi> =</math><br></br><math>
+                = <mi>xy</mi><mo>+</mo><mn>2</mn><mi>xz</mi><mo>+</mo><mi>yz</mi><mo>+</mo>
+                <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+                <mi>y</mi>
+                <mn>2</mn> </msup>=<mn>2</mn>
+               	<mfenced>
+               		<mrow>
+                			<mi>x</mi>
+              				<mo>+</mo>
+                			<mfrac>
+              					<mrow>1</mrow>
+              					<mrow>2</mrow>
+             		 		</mfrac>
+              				<mi>y</mi>
+              			</mrow>
+              		</mfenced>
+              		<mfenced>
+               		<mrow>
+                			<mi>z</mi>
+              				<mo>+</mo>
+                			<mfrac>
+              					<mrow>1</mrow>
+              					<mrow>2</mrow>
+             		 		</mfrac>
+              				<mi>y</mi>
+              			</mrow>
+              		</mfenced>
+              		
+                	
+              </math></section>
+     
+          </div>
+
+<div class="slide" id="recessive-posterity">          
+          <header><h1>Рецессивные особи</h1></header>
+         <section>
+          <table border="2">
+          		<tr>
+          			<th rowspan="2">Вероятность скрещиваний</th>
+          			<th colspan="2">Скрещиваемые генотипы	</th>
+          			<th rowspan="2">Генотипы потомства</th>
+          		</tr>
+          		<tr>
+          			<th>Женские</th>
+          			<th>Мужские</th>
+          		</tr>
+          		<tr>
+						<td>x&#178;</td>    
+						<td>AA</td>      		
+						<td>AA</td>
+						<td>AA</td>
+          		</tr>
+          		<tr>
+						<td>xy</td>    
+						<td>AA</td>      		
+						<td>aА</td>
+						<td>&#189;АА+&#189;aА</td>
+          		</tr>
+          		<tr>
+						<td>xz</td>    
+						<td>AA</td>      		
+						<td>aa</td>
+						<td>Aa</td>
+						</tr>
+					<tr>
+						<td>yx</td>    
+						<td>aA</td>      		
+						<td>AA</td>
+						<td>&#189;АА+&#189;aА</td>
+						</tr>
+					<tr>
+						<td>y&#178;</td>    
+						<td>aA</td>      		
+						<td>aA</td>
+						<td>&#188;АА+&#189;aА+<span class="js">&#188;aa</span></td>
+          		</tr>
+          		<tr>
+						<td>yz</td>    
+						<td>aA</td>      		
+						<td>aa</td>
+						<td>&#189;aА+<span class="js">&#189;aa</span></td>
+          		</tr>
+          		<tr>
+						<td>zx</td>    
+						<td>aa</td>      		
+						<td>AA</td>
+						<td>aА</td>
+						</tr>
+						<tr>
+						<td>zy</td>    
+						<td>aa</td>      		
+						<td>aA</td>
+						<td>&#189;aА+<span class="js">&#189;aa</span></td>
+          		</tr>
+          		<tr>
+						<td>z&#178;</td>    
+						<td>aa</td>      		
+						<td>aa</td>
+						<td><span class="js">aa</span></td>
+          		</tr>
+          	</table>
+          	</section>
+          	<section class="formula">
+          	<img height="30" src="z_with_line.png" alt="z_with_line" /> = 
+          		<math>
+          		<mfrac>
+              	<mrow>1</mrow>
+              	<mrow>4</mrow>
+              </mfrac>
+              <msup>
+                <mi>y</mi>
+                <mn>2</mn>
+              </msup>
+              	<mo>+</mo>
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+              <mi>yz</mi>
+              <mo>+</mo>
+              <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>2</mrow>
+              </mfrac>
+              <mi>zy</mi>
+              <mo>+</mo>
+              <msup>
+                  <mi>z</mi>
+                  <mn>2</mn>
+              </msup>
+                =
+                <mfrac>
+              	<mrow>1</mrow>
+              	<mrow>4</mrow>
+              </mfrac>
+              <msup>
+                <mi>y</mi>
+                <mn>2</mn>
+              </msup>
+              	<mo>+</mo>
+             
+              <mi>yz</mi>
+             
+              <mo>+</mo>
+              <msup>
+                  <mi>z</mi>
+                  <mn>2</mn>
+              </msup>
+                =
+               <msup>
+               	<mfenced>
+               		<mrow>
+                			<mi>z</mi>
+              				<mo>+</mo>
+                			<mfrac>
+              					<mrow>1</mrow>
+              					<mrow>2</mrow>
+             		 		</mfrac>
+              				<mi>y</mi>
+              				
+              			</mrow>
+              		</mfenced>
+              		<mn>2</mn>
+              		</msup>
+                	
+              </math></section>
+     
+          </div>
+          
+          <div class="slide" id="goto">
+          <header><h1>Оператор перехода</h1></header>
+          <style>
+          #phasePort{
+          	margin:0px auto;display:block
+          }
+
+</style>
+          <section><img id="phasePort" height="350" src="operator.png" alt="formula" /><p>Эти выражения однозначно определяют генетическое описание следующего поколения по описанию предыдущего.<p></section>
+          
+          
+          </div>
+
+		<div class="slide" id="phase">
+		<header><h1>Фазовый портрет</h1></header>
+		<style>
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+			
+			<p><pre>x &#8805 0, y &#8805 0, z &#8805 0, x + y + z = 1</pre></p>
+			<img id="phasePort" height="400" src="triang.png" alt="triang" />
+			</section>
+		</div>
+
+<div class="slide" id="curve">
+		<header><h1>Плоскость</h1></header>
+		<style> 
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+			
+			<p>Из соотношений, задающих оператор перехода, следует</p>
+			<img id="phasePort" height="250" src="fExp.png" alt="formula" />
+			<img id="phasePort" height="250" src="cone.png" alt="formula" />
+			</section>
+		</div>
+
+<div class="slide" id="dots">
+		<header><h1>Неподвижные точки отображения</h1></header>
+		<style> 
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+			
+			<p>Есть ли такие составы генотипов популяции, которые не изменяются в процессе эволюции?</p>
+			<p>Пусть <img height="20" src="x_with_line.png" alt="x_with_line" /> = x, <img height="20" src="y_with_line.png" alt="y_with_line" /> = y, <img height="20" src="z_with_line.png" alt="z_with_line" />=z</p>
+<p>Значения x*, y*, z*, удовлетворяют условиям </p><p>y*&#178; = 4x*z* и x* + y* + z* = 1, x* &#8805; 0, y* &#8805; 0, z* &#8805; 0</p>			
+<ul id="definitions">
+            <li>Каждая точка инвариантной кривой является неподвижной по отношению к отображению</li>
+            <li>эволюция такова, что потомство получает состав, отвечающий одной из точек этой кривой, и после этого состав не меняется.</li>			
+			<p>. То есть </p>
+			</section>
+		</div>
+		
+		<div class="slide" id="population">
+		<header><h1>Неизменный состав популяции</h1></header>
+		<style> 
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+			
+			<p>Из 1 и 3 уравнений оператора перехода находим </p>
+				
+			<img id="phasePort" height="400" src="const.png" alt="formula" />
+			<img id="phasePort" height="40" src="constm.png" alt="formula" />
+			</section>
+		</div>
+		
+		<div class="slide" id="population2">
+		<header><h1>Неизменный состав популяции</h1></header>
+		<style> 
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+			
+			<p>Таким образом, в процессе эволюции не меняется разность между относительным числом доминатных и рецессивных особей популяции.</p>
+			<p>Например, если x = z, то есть относительные численности доминатных и рецессивных особей равны, то</p>
+				
+			<img id="phasePort" height="350" src="xeqz.png" alt="formula" />
+			
+			</section>
+		</div>
+
+<div class="slide" id="xes">
+          <header>Признак, сцепленный с полом</header>
+          <section>
+            <style>
+            #definitions {
+              font-size: 20px;
+            }
+             
+            </style>
+            	<p>Вероятности генотипов, отвечающих за признак, существенно связаны с полом. Рассмотрим на примере дальтонизма.</p>
+            <ul id="definitions">
+            <li><b>Доминантный признак</b> — подавляющий, &laquo;сильный&raquo;, нормальное зрение, обозначим заглавной <span class="strong">А</span></li>
+            <li><b>Рецессивный признак</b> — подавляемый, &laquo;слабый&raquo;, определяет дальтонизм, обозначим строчной <span class="css">a</span></li>
+            <li>У <b>женских особей</b> возможны генотипы <span class="strong">А</span><span class="strong">А</span>, <span class="strong">А</span><span class="css">a</span> и <span class="css">a</span><span class="css">a</span></li>
+            <li>У <b>мужских особей</b> возможны только генотипы <span class="strong">А</span> и <span class="css">a</span></li>
+            <li><span class="css">a</span><span class="css">a</span> - проявляется дальтонизм.</li>
+            
+            </ul>
+          </section>
+        </div>
+        
+        <div class="slide" id="xes2">
+          <header>Признак, сцепленный с полом</header>
+          <section>
+            <style>
+            #definitions {
+              font-size: 20px;
+            }
+             #phasePort {
+		margin:0px auto;display:block
+		
+		}
+            </style>
+            <ul id="definitions">
+            <li><b>x, y, z</b> — относительные количества (вероятности) генотипов женских особей.</li>
+            <li><b>u, v</b> — относительные количества (вероятности) генотипов мужских особей.</li> </ul>
+   <img id="phasePort" width="400" src="xen.png" alt="x_with_line" />
+   
+            <ul id="definitions">
+            <li>Скрещивание происходит без дискриминации.</li>
+            <li>Вероятности получения в потомстве мужских и женских особей одинаковы.</li>
+            </ul>
+            <p>Составим таблицу всевозможных вариантов скрещиваний.</p>
+          </section>
+        </div>
+
+
+<div class="slide" id="table-of-genotips-sex">
+          <header><h1>Всевозможные варианты</h1></header>
+          <section class="scheme">
+          <table border="2">
+          		<tr>
+          			<th rowspan="2">Вероятность скрещиваний</th>
+          			<th colspan="2">Скрещиваемые генотипы	</th>
+          			<th colspan="2">Генотипы потомства</th>
+          		</tr>
+          		<tr>
+          			<th>Женские</th>
+          			<th>Мужские</th>
+          			<th>Женские</th>
+          			<th>Мужские</th>
+          		</tr>
+          		<tr>
+						<td>xu</td>    
+						<td>AA</td>      		
+						<td>A</td>
+						<td>AA</td>
+						<td>A</td>
+          		</tr>
+          		<tr>
+						<td>xv</td>    
+						<td>AA</td>      		
+						<td>a</td>
+						<td>Aa</td>
+						<td>A</td>
+          		</tr>
+          		<tr>
+						<td>yu</td>    
+						<td>Aa</td>     
+						<td>A</td> 		
+						<td>&#189;AA+&#189;Aa</td>
+						<td>&#189;A+&#189;a</td>
+						</tr>
+					<tr>
+						<td>yv</td>    
+						<td>Aa</td>      		
+						<td>A</td>
+						<td>&#189;Aa+&#189;aa</td>
+						<td>&#189;A+&#189;a</td>
+						</tr>
+          		<tr>
+						<td>zu</td>    
+						<td>aa</td>      		
+						<td>A</td>
+						<td>Aa</td>
+						<td>a</td>
+          		</tr>
+          		<tr>
+						<td>zv</td>    
+						<td>aa</td>      		
+						<td>a</td>
+						<td>aa</td>
+						<td>a</td>
+					</tr>
+          	</table>
+          	</section>
+          	<section>
+			<style>
+            
+             #phasePort {
+		margin:0px auto;display:block
+		
+		}         
+		</style> 
+			<img id="phasePort" width="500" src="opIzb.png" alt="x_with_line" />
+          	</section>
+          </div>
+          
+<div class="slide" id="gotosex">
+          <header><h1>Оператор перехода</h1></header>
+          <style>
+          #phasePort{
+          	margin:0px auto;display:block
+          }
+
+</style>
+
+          <section><p>Исключим z и v:</p><img id="phasePort" height="400" src="isk.png" alt="formula" /><p>Эти выражения однозначно определяют генетическое описание следующего поколения по описанию предыдущего.<p></section>
+          
+          
+          </div>          
+          
+<div class="slide" id="dinsys">
+          <header>Динамическая система</header>
+          <section>
+            <style>
+            #definitions {
+              font-size: 20px;
+            }
+             #phasePort {
+		margin:0px auto;display:block
+		
+		}
+            </style>
+            <ul id="definitions">
+            <li><b>Состояние</b> — относительные численности доминантных и гибридных особей женской части популяции и доминантных особей мужской части популяции.</li>
+            <li><b>Фазовое пространство</b> — треугольная призма x + y &#8804; 1, x &#8805; 0, y &#8805; 0 , 0 &#8804; u &#8804; 1. </li> </ul>
+   <img id="phasePort" height="250" src="prizm.png" alt="x_with_line" />
+   
+            <ul id="definitions">
+            <li><b>Оператор смены состояния</b></li>
+            
+            </ul>
+            <img id="phasePort" height="90" src="operatorSex.png" alt="x_with_line" />
+          </section>
+        </div>
+			
+			<div class="slide" id="phase-sex">
+		<header><h1>Фазовый портрет</h1></header>
+		<style>
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+			
+			<p><pre>x + y &#8804; 1, x &#8805; 0, y &#8805; 0 , 0 &#8804; u &#8804; 1</pre></p>
+			<img id="phasePort" height="400" src="prism2.png" alt="triang" />
+			</section>
+		</div>
+		
+		<div class="slide" id="curve_s">
+		<header><h1>Поверхность S</h1></header>
+		<style>
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+			<p>Исключая из выражений оператора перехода u и x+ &#189; y, получим</p>
+			<img id="phasePort" height="250" src="ploscost.png" alt="triang" />
+			<p>Это уравнение поверхности, инвариантной к отображению.</p>
+						<img id="phasePort" height="230" src="hp.png" alt="triang" />
+			</section>
+		</div>
+		
+		<div class="slide" id="curve_other">
+		<header><h1>Другая инвариантная поверхность</h1></header>
+		<style>
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+			<img id="phasePort" height="300" src="othercur.png" alt="triang" />
+			<img id="phasePort" height="250" src="WolframAlpha--plot_zxy2--2012-10-01_1605.png" alt="triang" />
+			</section>
+		</div>
+		
+		<div class="slide" id="way">
+		<header><h1>Расстояние до инвариантной поверхности</h1></header>
+		<style>
+		#definitions {
+              font-size: 20px;
+            }
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+						<p>Модуль величины <i>ρ</i> даёт расстояние от исходной точки x, y, z до инвариантной плоскости, а её знак определяет, по какую сторону от плоскости она расположена.</p>
+			<img id="phasePort" width="600" src="way.png" alt="triang" />
+			
+			<ul id="definitions">
+            <li>Точка, не принадлежащая инвариантной плоскости, приближается к ней со скоростью геометрической прогрессии со знаменателем 1/2.</li>
+            <li>Точка последовательно переходит с одной стороны инвариантной плоскости на другую.</li> </ul>
+			</section>
+		</div>
+		
+		<div class="slide" id="parabola">
+		<header><h1>Кривая L</h1></header>
+		<style>
+		#definitions {
+              font-size: 20px;
+            }
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+						<p>Пересечение поверхности S с инвариантной плоскостью - часть параболы L</p>
+			<img id="phasePort" width="400" src="l.png" alt="triang" />
+			<img id="phasePort" width="500" src="Lf.png" alt="triang" />
+			
+			<ul id="definitions">
+            <li>Если исходная точка не принадлежит инвариантной плоскости, фазовая траектория приближается к одной из неподвижных точек асимптотически.</li>
+            <li>Если исходная точка принадлежит инвариантной плоскости, фазовая траектория сразу попадает в неподвижную точку после однократного применения отображения.</li> </ul>
+			</section>
+		</div>
+		
+		<div class="slide" id="end">
+		<header><h1>Итог</h1></header>
+		<style>
+		#definitions {
+              font-size: 20px;
+            }
+		#phasePort {
+		margin:0px auto;display:block
+		
+		}
+		</style>
+			<section>
+						<p>Если начальный состав генотипов не связан соотношением x+1/2y-u=0, то</p>
+			<ul id="definitions">
+            <li>Эволюция не заканчивается за один шаг.</li>
+            <li>Генетический состав потомства связан неким соотношением, определяющим поверхность S в фазовом пространстве.</li> </ul>
+            <p>Если начальный состав генотипов связан соотношением x+1/2y-u=0, то</p>
+			<ul id="definitions">
+			<li>В процессе эволюции не меняется состав генотипов мужской части популяции, изменяется только генетический состав женской части.</li>
+            <li>Эволюция заканчивается за один шаг.</li>
+            <li>Эволюция происходит точно так же, как при эволюции генотипа,</li> </ul>
+			</section>
+		</div>
+		
+        <div class="slide" id="table-of-contents">
+          <header><h1>the End</h1></header>
+          <style>
+            #toc-list > li {
+              font-size: 26px;
+              line-height: 33px;
+              opacity: 0.85;
+            }
+            #toc-list > li:hover {
+              opacity: 1;
+            }
+            #toc-list a {
+              border-bottom: 0;
+            }
+            #toc-list a:hover{
+              border-bottom: 2px solid #3f3f3f;
+            }
+            #toc-list img {
+              vertical-align: middle;
+              margin-left: 15px;
+            }
+          </style>
+          <section>
+            <ul id="toc-list">
+            </ul>
+          </section>
+        </div>
+
+        
+
+
+      </div> <!-- slides -->
+      <div id="speaker-note" class="invisible" style="display: none;">
+      </div> <!-- speaker note -->
+      <aside id="help" class="sidebar invisible" style="display: hidden;">
+        <table>
+          <caption>Help</caption>
+          <tbody>
+            <tr>
+              <th>Move Around</th>
+              <td>&larr;&nbsp;&rarr;</td>
+            </tr>
+            <tr>
+              <th>Source File</th>
+              <td>s</td>
+            </tr>
+            <tr>
+              <th>Change Theme</th>
+              <td>t</td>
+            </tr>
+            <tr>
+              <th>Syntax Highlight</th>
+              <td>h</td>
+            </tr>
+            <tr>
+              <th>Speaker Notes</th>
+              <td>n</td>
+            </tr>
+            <tr>
+              <th>Toggle 3D</th>
+              <td>3</td>
+            </tr>
+            <tr>
+              <th>Help</th>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+      </aside>
+    </div> <!-- presentation -->
+
+    <!--[if lt IE 9]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">
+    </script>
+    <script>CFInstall.check({ mode: "overlay" });</script>
+    <![endif]-->
+
+    <script src="src/prettify/prettify.js" onload="prettyPrint();" defer></script>
+    <script src="js/utils.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script>
+      // Check if new appcache is available, load it, and reload page.
+      if (window.applicationCache) {
+        window.applicationCache.addEventListener('updateready', function(e) {
+          if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+            window.applicationCache.swapCache();
+            if (confirm('A new version of this site is available. Load it?')) {
+              window.location.reload();
+            }
+          }
+        }, false);
+      }
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-15028909-5']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </body>
+</html>
